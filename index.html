@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的购物车</title>
+    <!-- 引入ElementUI样式 -->
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/iconfont.css">
+
+    <style>
+        .header {
+            min-width: 1200px;
+            background-color: #fff;
+            width: 300px;
+            margin: 30px auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 88px;
+        }
+
+        .row {
+            width: 100vw;
+            height: 31px;
+            margin: 130px auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+        }
+
+        .footer {
+            z-index: 9999;
+            position: fixed;
+            margin-left: -10px;
+            width: 1200px;
+            bottom: 0px;
+            background: #e5e5e5;
+        }
+
+        .header-title {
+            font-size: 24px;
+            text-align: center;
+            width: 125px;
+        }
+
+        .header-title-font {
+            font-size: 16px;
+            margin-left: 2%;
+        }
+
+        .header-title-font2 {
+            font-size: 14px;
+            color: rgba(42, 39, 48, 0.84);
+            margin-left: 2%;
+            margin-right: 2%;
+        }
+
+        .el-icon-setting-text {
+            visibility: hidden;
+            width: 70px;
+            font-size: 16px;
+            background-color: rgba(45, 45, 45, 0.76);
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+
+            /* 定位 */
+            position: absolute;
+        }
+
+        .el-icon-setting:hover .el-icon-setting-text {
+            visibility: visible;
+        }
+
+        .el-submenu__title i {
+            color: white;
+        }
+
+        .el-icon-edit-outline-text {
+            visibility: hidden;
+            width: 70px;
+            font-size: 16px;
+            background-color: rgba(45, 45, 45, 0.76);
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+
+            /* 定位 */
+            position: absolute;
+        }
+
+        .el-icon-edit-outline:hover .el-icon-edit-outline-text {
+            visibility: visible;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        .el-input-group__append {
+            border: 2px;
+            background-color: rgba(255, 71, 1, 0.84);
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .el-input-group__append {
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .el-input__inner {
+            border: #ff4401 2px solid;
+            border-bottom-left-radius: 20px;
+            border-top-left-radius: 20px;
+        }
+
+        .input-label-font {
+            font-size: 13px;
+            color: #ff4401;
+            text-align: center;
+            width: 40px;
+            padding: 2px;
+        }
+
+        .input-label-default-font {
+            background-color: rgba(255, 68, 1, 0.87);
+            font-weight: bold;
+            color: white;
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
+        }
+
+        .input-label-font2:hover {
+            background-color: #ffEEE5;
+        }
+
+        .storeLink {
+            width: auto;
+            padding: 2px 5px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body style="padding: 0;margin: 0">
+<div id="app">
+    <el-container style="width: 100%;height: 100%;margin: auto;min-width: 900px">
+        <el-header style="height: 36px;margin: 0;bottom: 0">
+            <!--   顶部vip信息-->
+            <el-dropdown>
+                <span class="el-dropdown-link" style="color: #ff0a19">vip<i
+                        class="el-icon-arrow-down el-icon--right"></i></span>
+                <el-dropdown-menu slot="dropdown">
+                    <div style="width: 300px;height: 120px">
+                        <div class="header-title-font2">
+                            <div style="text-align: right">
+                                <span><el-link href="#" target="_blank">账户管理</el-link></span>
+                                <span style="color: rgba(60,60,60,0.35)">|</span>
+                                <span><el-link href="#" target="_blank">退出</el-link></span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px" class="header-title-font2">
+                            <div style="text-align: center">
+                                <div style="margin-left:100px;width: 100px;text-align: left">淘气值:888</div>
+                                <div style="margin-left:100px;width: 100px;text-align: left">普通会员</div>
+                            </div>
+
+                        </div>
+                        <div style="background: #ffdbcd;text-align: center;margin-top: 20px"
+                             class="header-title-font2">
+                            <el-link href="#">查看你的专属权益</el-link>
+                        </div>
+                    </div>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <!--   顶部消息-->
+            <el-dropdown style="margin-left: 15px">
+                <span class="el-dropdown-link">
+                    <i class="el-icon-message" style="width: 14px"></i>
+                    &nbsp;消息
+                    <i class="el-icon-arrow-down el-icon--right"></i></span>
+                <el-dropdown-menu slot="dropdown" style="width: 350px;height: 200px">
+                    <el-container>
+                        <el-header style="height: 27px">
+                            <div style="text-align: center;font-size: 18px;color: rgba(60,60,60,0.84)"><b>未读新消息</b>
+                            </div>
+                        </el-header>
+                        <div style="border-top: rgba(131,131,131,0.25) solid 1px;border-bottom: rgba(131,131,131,0.25) solid 1px;height: 150px">
+
+                        </div>
+                        <div>
+                            <i class="el-icon-setting" style="width: 13px;margin-top: 8px;margin-left: 4px">
+                                <span class="el-icon-setting-text">消息设置</span>
+                            </i>
+                            <i class="el-icon-edit-outline" style="width: 13px;margin-top: 8px;margin-left: 4px">
+                                <span class="el-icon-edit-outline-text">消息反馈</span>
+                            </i>
+                            <span style="float: right">
+                                <span style="font-size: 14px;color: #3c3c3c;margin-right: 5px;border-right: rgba(194,194,194,0.76) 1px solid">
+                                    <el-link href="#">
+                                        买家消息
+                                    </el-link>
+                                    &nbsp;&nbsp;</span>
+                                <span style="font-size: 14px;color: #3c3c3c;margin-right: 5px"><el-link href="#">
+                                    卖家消息
+                                </el-link></span>
+                            </span>
+                        </div>
+                    </el-container>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <!--   手机逛淘宝-->
+            <el-link class="header-title-font2">手机逛淘淘</el-link>
+            <el-link class="header-title-font2">淘淘网首页</el-link>
+            <!--    我的淘淘-->
+            <el-dropdown class="header-title-font2">
+                <span class="el-dropdown-link" style="margin-top: 5px">
+                    我的淘淘
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>已买到的宝贝</el-dropdown-item>
+                    <el-dropdown-item>我的足迹</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+
+            <!--  购物车-->
+            <el-dropdown class="header-title-font2">
+                <span class="el-dropdown-link" style="margin-top: 5px">
+                    <i class="iconfont el-icon--left icon-gouwuchekong" style="color: #ff4401"></i>
+                    购物车
+                    <span style="color: #ff4401"><b>30</b></span>
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>测试数据</el-dropdown-item>
+                    <el-dropdown-item>测试数据</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+
+            <!--  收藏夹-->
+            <el-dropdown class="header-title-font2">
+                <span class="el-dropdown-link" style="margin-top: 5px">
+                    <i class="el-icon-star-on el-icon--left" style="font-size: 18px"></i>
+                    收藏夹
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>收藏的宝贝</el-dropdown-item>
+                    <el-dropdown-item>收藏的店铺</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <el-link class="header-title-font2">商品分类</el-link>
+        </el-header>
+        <div class="header">
+            <el-header>
+                <el-row>
+                    <el-col style="width: 200px">
+                        <a href="#" title="淘淘网 Taotao.com" target="_top">
+                            <el-row>
+                                <el-col style="width: 100px">
+                                    <el-row style="font-size: 30px;font-family:'ebfont';color: #ff4401">
+                                        淘淘网
+                                        <el-row style="font-size: 16px"><b>Taotao.com</b></el-row>
+                                    </el-row>
+                                </el-col>
+                            </el-row>
+                        </a>
+                    </el-col>
+                    <el-col style="width: 580px;margin-top: -8px">
+                        <div style="margin-top: 15px;">
+                            <el-row>
+                                <el-col class="input-label-font input-label-default-font" style="margin-left: 20px">宝贝
+                                </el-col>
+                                <el-col class="input-label-font input-label-font2">天猫</el-col>
+                                <el-col class="input-label-font input-label-font2">店铺</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-input :placeholder="user.hotSearch" v-model="input2" prefix-icon="el-icon-search"
+                                          class="input-with-select">
+
+                                    <template slot="append">
+                                        <a @click="search">搜索</a>
+                                    </template>
+
+                                </el-input>
+                            </el-row>
+                            <el-row>
+
+                            </el-row>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-header>
+
+        </div>
+
+
+        <div class="row" style="background-color: rgba(255,68,1,0.77);color: white;">
+
+            <el-row class="header" style="margin: 0 auto;height: 31px; background-color:transparent;">
+                <el-col style="width: 190px;height: 31px;padding:2px 0;text-align: center;background-color: rgba(255,68,1,0.75)"><b >主题市场</b></el-col>
+                <el-col class="storeLink">天猫</el-col>
+                <el-col class="storeLink">聚划算</el-col>
+                <el-col class="storeLink">天猫超市</el-col>
+
+                <el-col class="storeLink">海抢购</el-col>
+                <el-col class="storeLink">电器城</el-col>
+                <el-col class="storeLink">司法拍卖</el-col>
+                <el-col class="storeLink">淘宝心选</el-col>
+                <el-col class="storeLink">兴农脱贫</el-col>
+
+                <el-col class="storeLink">飞猪旅行</el-col>
+                <el-col class="storeLink">智能生活</el-col>
+                <el-col class="storeLink">苏宁易购</el-col>
+            </el-row>
+        </div>
+
+
+    </el-container>
+
+</div>
+
+
+<!--引入ElementUI组件必须先引入Vue-->
+<script src="./js/vue.js"></script>
+<!-- 引入ElementUI组件库 -->
+<script src="./js/index.js"></script>
+<script type="text/javascript">
+    const vm = new Vue({ // 配置对象 options
+        // 配置选项(option)
+        el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
+        data() {
+            return {
+                user: {
+                    hotSearch: '半领内搭女加绒',
+                    RecentlySearch: ['笔记本', 'r5 3600散片']
+                }
+            };
+        },
+        methods: {
+            search() {
+                console.log('点击了search')
+            }
+        }
+    })
+</script>
+</body>
+</html>
