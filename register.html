@@ -5,6 +5,8 @@
     <title>注册页面</title>
     <!-- 引入ElementUI样式 -->
     <link rel="stylesheet" href="./css/index.css">
+    <!-- cdn引入ElementUI样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./css/iconfont.css">
 
     <style>
@@ -247,7 +249,7 @@
                                 <el-form-item>
                                     <el-button
                                             style="background-color: #ff4401;color: white;width: 200px;font-size: 17px;margin-top: 20px"
-                                            @click="submitForm">
+                                            @click.native="submitForm">
                                         提交
                                     </el-button>
                                 </el-form-item>
@@ -348,7 +350,7 @@
                     phone: '',//电话
                     value: '+86',//区号
                     checkComputer:'',//检验人机
-                    select: '',//
+                    select: '',//选择的区号
                 }
             }
 

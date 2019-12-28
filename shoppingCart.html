@@ -21,6 +21,7 @@
             right: 0;
             height: 88px;
         }
+
         .footer {
             z-index: 9999;
             position: fixed;
@@ -139,7 +140,6 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }
-
 
 
     </style>
@@ -276,7 +276,8 @@
                     <el-col style="width: 200px">&nbsp;</el-col>
                     <el-col style="width: 500px;float: right;margin-top: -8px">
                         <div style="margin-top: 15px;">
-                            <el-input placeholder="请输入内容" v-model="input2" prefix-icon="el-icon-search"
+                            <el-input @keyup.enter.native="filterArr" placeholder="请输入内容" v-model="searchWord"
+                                      prefix-icon="el-icon-search"
                                       class="input-with-select">
                                 <el-select v-model="select" slot="prepend" placeholder="宝贝" style="width: 100px">
                                     <el-option label="店铺" value="1"></el-option>
@@ -309,20 +310,28 @@
                                         <template slot-scope="scope">
                                             <el-row>
                                                 <el-col :span="3" style="width: 80px">
-                                                    <el-image :src="scope.row.src" alt=""></el-image>
+                                                    <el-image :src="scope.row.imgSrc" alt=""></el-image>
                                                 </el-col>
                                                 <el-col :span="6" style="min-width: 182px;margin-left: 10px">
                                                     <el-row style="height: 57px">
                                                         <el-link :href="scope.row.url"
                                                                  active-color="#f40"
                                                                  data-point="tbcart.8.11" class="text">
-                                                            {{scope.row.text}}
+                                                            {{scope.row.cName}}
                                                         </el-link>
                                                     </el-row>
                                                     <el-row>
                                                         <el-col :span="3" style="width: 23px"
-                                                                v-for="src in scope.row.srcList">
-                                                            <img :src="src" alt="">
+                                                                v-if="scope.row.srcList1 != null">
+                                                            <img :src="scope.row.srcList1" alt="">
+                                                        </el-col>
+                                                        <el-col :span="3" style="width: 23px"
+                                                                v-if="scope.row.srcList2 != null">
+                                                            <img :src="scope.row.srcList2" alt="">
+                                                        </el-col>
+                                                        <el-col :span="3" style="width: 23px"
+                                                                v-if="scope.row.srcList3 != null">
+                                                            <img :src="scope.row.srcList3" alt="">
                                                         </el-col>
                                                     </el-row>
 
@@ -334,10 +343,10 @@
                                     <el-table-column
                                             label="单价">
                                         <template slot-scope="scope">
-                                            <el-row style="color: #9b9b9b"><strike>
-                                                {{scope.row.unitPrice.price1}}
+                                            <el-row style="color: #9b9b9b"><strike v-if="scope.row.cPrice">
+                                                ￥{{scope.row.cPrice}}
                                             </strike></el-row>
-                                            <el-row><b>{{scope.row.unitPrice.price2}}</b></el-row>
+                                            <el-row>￥<b>{{scope.row.cPay}}</b></el-row>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
@@ -345,7 +354,7 @@
                                             label="数量"
                                             show-overflow-tooltip>
                                         <template slot-scope="scope">
-                                            <el-input-number size="mini" v-model="scope.row.nums"
+                                            <el-input-number @change="addNum" size="mini" v-model="scope.row.oNum"
                                                              :min="1"></el-input-number>
                                         </template>
                                     </el-table-column>
@@ -354,7 +363,8 @@
                                             label="金额"
                                             show-overflow-tooltip>
                                         <template slot-scope="scope">
-                                            <el-row style="color:#ff4401"><b>{{scope.row.unitPrice.price2}}</b></el-row>
+                                            <el-row style="color:#ff4401"><b>￥{{parseFloat(parseFloat(scope.row.cPay*scope.row.oNum).toFixed(2))}}</b>
+                                            </el-row>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
@@ -363,7 +373,7 @@
                                             show-overflow-tooltip>
                                         <template slot-scope="scope">
                                             <el-row>
-                                                <el-link>移入收藏夹</el-link>
+                                                <el-link @click="moveToFavorites">移入收藏夹</el-link>
                                             </el-row>
                                             <el-row>
                                                 <el-link @click="handleDelete(scope.$index, scope.row)">删除</el-link>
@@ -375,7 +385,7 @@
                                     </el-table-column>
                                 </el-table>
                             </el-main>
-                            <el-footer class="footer " >
+                            <el-footer class="footer ">
                                 <el-row style="padding: 23px">
                                     <el-col :span="2" style="width: 80px">
                                         <el-checkbox @change="checkedAll()">全选</el-checkbox>
@@ -392,10 +402,13 @@
                                     <el-col :span="2" style="width: 60px">
                                         <el-link @click="share">分享</el-link>
                                     </el-col>
-                                    <el-col :span="9" style="float: right">
+                                    <el-col :span="11" style="float: right;">
                                         <el-row>
-                                            <el-col :span="6">已选商品 <b style="color: #ff4401">0</b> 件</el-col>
-                                            <el-col :span="12">合计（不含运费）：0.00</el-col>
+                                            <el-col :span="6">已选商品 <b style="color: #ff4401">{{this.multipleSelection.length}}</b>
+                                                件
+                                            </el-col>
+                                            <el-col :span="12">合计（不含运费）：<b style="color: #ff4401"><span
+                                                    v-if="this.countPrice!=0">￥</span>{{this.countPrice}}</b></el-col>
                                             <el-col :span="6">
                                                 <el-button @click="pay"
                                                            style="color: white;margin-left:0px;margin-top: -25px;background: #ff4401;font-size: 20px;width: 100%;height: 60px">
@@ -423,144 +436,75 @@
 </div>
 
 
-<!--引入ElementUI组件必须先引入Vue-->
+<!-- 引入ElementUI组件必须先引入Vue-->
 <script src="./js/vue.js"></script>
 <!-- 引入ElementUI组件库 -->
 <script src="./js/index.js"></script>
+<!-- 引入axios -->
+<script src="./js/axios.min.js"></script>
+<!--初始化页面发送一次请求获取用户数据-->
+<script>
+    axios
+        .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+        .then(response => (console.log(response)))
+</script>
+
 <script type="text/javascript">
     const vm = new Vue({ // 配置对象 options
         // 配置选项(option)
         el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
         data() {
             return {
+                searchWord: '',
                 select: '宝贝',
                 activeName: 'first',
                 tableData: [
                     {
-                        text: '米哲新款22英寸窄边框液晶HDMI显示器高清游戏IPS显示屏非24寸',
-                        src: 'img/1.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
+                        cId: '',
+                        imgSrc: 'img/1.jpg',
+                        cName: '米哲新款22英寸窄边框液晶HDMI显示器高清游戏IPS显示屏非24寸',
+                        cInfo: '',
+                        cType: '',
+                        cMark: '',
+                        cPrice: 499.00,
+                        cPay: 299.00,
+                        oNum: 1,
+                        oStatus: '',
                         url: '#',
-                        unitPrice: {
-                            price1: '￥499.00',
-                            price2: '￥299.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: 'Asus/华硕 PRIME Z390-P台式机电脑游戏主板Z390大板支持9代 CPU',
-                        src: 'img/2.jpg',
-                        srcList: ['img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '',
-                            price2: '￥848.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: 'WD/西部数据WD20SPZX 2tb 2.5寸笔记本机械硬盘2t 5400转128M 7MM',
-                        src: 'img/3.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥452.00',
-                            price2: '￥409.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: 'WD/西数2TB硬盘 台式机游戏2000g专用企业级黑盘 监控盘 SATA 64M',
-                        src: 'img/4.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.2.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥370.00',
-                            price2: '￥268.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: '奥睿科/orico 硬盘托架2.5转3.5寸金属硬盘加厚支架电脑笔记本机械SSD台式机固态硬盘固定架机箱硬盘转换支架',
-                        src: 'img/5.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥39.90',
-                            price2: '￥13.80',
-                        },
-                        nums: 1,
-                    }, {
-                        text: '【礼遇价】WD西部数据 SN750 固态硬盘SSD 1TB 台式机高速四通道NVMe黑盘',
-                        src: 'img/6.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥1399.00',
-                            price2: '￥1299.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: '【礼遇价】狼蛛机械键盘鼠标套装游戏吃鸡笔记本电脑有线键鼠耳机电竞三件套',
-                        src: 'img/7.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥399.00',
-                            price2: '￥169.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: 'Intel/英特尔 760P 256G SSD M.2 2280 PCIE NVME 固态硬盘SSD',
-                        src: 'img/8.jpg',
-                        srcList: ['img/1.1.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥599.00',
-                            price2: '￥369.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: '【领券减10】东芝RC500 500G M.2 PCIe NVMe SSD固态硬盘RD500 1T',
-                        src: 'img/9.jpg',
-                        srcList: ['img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥633.00',
-                            price2: '￥599.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: 'Hasee/神舟 战神 K670D-G4D1/E6 K670C-G4E1/K670E-G6A5/K670T',
-                        src: 'img/10.jpg',
-                        srcList: ['img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '￥4139.99',
-                            price2: '￥4098.59',
-                        },
-                        nums: 1,
-                    }, {
-                        text: 'WD/西数WD10SPZX 1tb 2.5寸笔记本机械硬盘1t 5400转128M 7MM蓝盘',
-                        src: 'img/11.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '',
-                            price2: '￥245.00',
-                        },
-                        nums: 1,
-                    }, {
-                        text: '【礼遇价】金士顿 HyperX笔记本内存条 DDR4 2400 2666 8G四代内存条 单根8G',
-                        src: 'img/12.jpg',
-                        srcList: ['img/1.1.jpg', 'img/1.3.jpg'],
-                        url: '#',
-                        unitPrice: {
-                            price1: '283.00',
-                            price2: '￥249.00',
-                        },
-                        nums: 1,
-                    },],
-                multipleSelection: []
+                        srcList1: 'img/1.1.jpg',
+                        srcList2: null,
+                        srcList3: 'img/1.3.jpg',
+                    }],
+                multipleSelection: [],
+                countPrice: 0
             };
         },
+        computed: {
+            countPrice: () => {
+                let count = 0
+                this.multipleSelection.forEach(row => {
+                    console.log(row)
+                    count += (row.unitPrice.price2 * row.nums)
+                })
+                return count
+            }
+        },
         methods: {
+            handleClick() {
+            },
+            filterArr() {
+                this.tableData.filter((row) => {
+                    // return row.
+                })
+            },
+            addNum() {
+                let count = 0
+                this.multipleSelection.forEach(row => {
+                    console.log(row)
+                    count += (row.cPay * row.oNum)
+                })
+                this.countPrice = parseFloat(parseFloat(count).toFixed(2))
+            },
             toggleSelection(rows) {
                 if (rows) {
                     rows.forEach(row => {
@@ -572,6 +516,11 @@
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+                let count = 0
+                val.forEach(row => {
+                    count += (row.cPay * row.oNum)
+                })
+                this.countPrice = parseFloat(parseFloat(count).toFixed(2))
             },
             handleDelete(index, row) {
                 this.tableData.splice(index, 1)
@@ -582,23 +531,57 @@
             },
             deleteChecked() {
                 console.log(this.multipleSelection)
-                this.multipleSelection.forEach(index => {
-                    console.log(this)
-                    this.$refs.multipleTable.clearFilter(index);
+                this.multipleSelection.forEach(row => {
+                    let index = this.tableData.indexOf(row)
+                    this.tableData.splice(index, 1)
                 })
 
             },
             cleanDispear() {
             },
             moveToFavorites() {
-
+                this.$alert('暂未开放', '移入收藏夹功能', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `action: ${action}`
+                        });
+                    }
+                })
             },
             share() {
-
+                this.$alert('暂未开放', '分享功能', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `action: ${action}`
+                        });
+                    }
+                })
             },
             pay() {
-
+                this.$confirm('进入支付, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '支付成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消支付'
+                    });
+                });
             }
+
+
+        },
+        mounted:{
 
         }
     })

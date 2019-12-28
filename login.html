@@ -5,7 +5,8 @@
     <title>淘淘登录页面</title>
     <!-- 引入ElementUI样式 -->
     <link rel="stylesheet" href="./css/index.css">
-    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1566859_hmmmvu7rrqr.css">
+    <!-- cdn引入ElementUI样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./css/iconfont.css">
     <style>
         body {
@@ -160,19 +161,19 @@
                             </div>
                         </el-row>
                         <el-row>
-                            <el-input placeholder="会员名/邮箱/手机号" v-model="input1" class="form">
+                            <el-input placeholder="会员名/邮箱/手机号" v-model="userName" class="form">
                                 <template slot="prepend"><i class="el-icon-s-custom" style="font-size: 26px"></i>
                                 </template>
                             </el-input>
                         </el-row>
                         <el-row>
-                            <el-input placeholder="密码" type="password" v-model="passwd" class="form" show-password>
+                            <el-input placeholder="密码" type="password" v-model="password" class="form" show-password>
                                 <template slot="prepend"><i class="el-icon-lock" style="font-size: 26px"></i>
                                 </template>
                             </el-input>
                         </el-row>
                         <el-row class="form">
-                            <el-button style="background-color: #ff4401;color: white;width: 300px;font-size: 17px">登录
+                            <el-button @click.native="login" style="background-color: #ff4401;color: white;width: 300px;font-size: 17px">登录
                             </el-button>
                         </el-row>
                         <el-row class="form" style="text-align: left;color: #3c3c3c;">
@@ -214,6 +215,8 @@
 
 <!--引入ElementUI组件必须先引入Vue-->
 <script src="./js/vue.js"></script>
+<!--Vue-Resource-->
+<script src="./js/vue-resource.js"></script>
 <!-- 引入ElementUI组件库 -->
 <script src="./js/index.js"></script>
 <script type="text/javascript">
@@ -221,7 +224,24 @@
         // 配置选项(option)
         el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
         data: {
-            msg: ''
+            user:{
+                userName: '',
+                password:''
+            }
+
+        },
+        methods:{
+            login(){
+
+                this.$http.post('/login',{user: this.user}).then(
+                    response=>{
+                        const result=response.data;//获取返回的数据
+                        console.log(result)
+                    }),
+                    response=>{
+                    this.$message.error('登录失败');
+                }
+            }
         }
     })
 </script>
