@@ -8,6 +8,7 @@
     <!-- cdn引入ElementUI样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./css/iconfont.css">
+    <script src="./js/iconfont.js"></script>
 
     <style>
         .header {
@@ -19,15 +20,6 @@
             left: 0;
             right: 0;
             height: 88px;
-        }
-
-        .row {
-            width: 100vw;
-            height: 31px;
-            margin: 130px auto;
-            position: absolute;
-            left: 0;
-            right: 0;
         }
 
         .footer {
@@ -147,6 +139,40 @@
             padding: 2px 5px;
             text-align: center;
         }
+
+        .row1 {
+            width: 100vw;
+            height: 31px;
+            margin: 130px auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+        }
+
+        .row2 {
+            width: 100vw;
+            margin: 161px auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+        }
+
+        .el-carousel__item {
+            color: #475669;
+            font-size: 18px;
+            opacity: 0.75;
+            line-height: 280px;
+            margin: 0;
+        }
+
+        .el-carousel__item:nth-child(2n) {
+            background-color: #99a9bf;
+        }
+
+        .el-carousel__item:nth-child(2n+1) {
+            background-color: #d3dce6;
+        }
+
     </style>
 
 </head>
@@ -304,10 +330,11 @@
         </div>
 
 
-        <div class="row" style="background-color: rgba(255,68,1,0.77);color: white;">
+        <div class="row1" style="background-color: rgba(255,68,1,0.77);color: white;">
 
             <el-row class="header" style="margin: 0 auto;height: 31px; background-color:transparent;">
-                <el-col style="width: 190px;height: 31px;padding:2px 0;text-align: center;background-color: rgba(255,68,1,0.75)"><b >主题市场</b></el-col>
+                <el-col style="width: 190px;height: 31px;padding:2px 0;text-align: center;background-color: rgba(255,68,1,0.75)">
+                    <b>主题市场</b></el-col>
                 <el-col class="storeLink">天猫</el-col>
                 <el-col class="storeLink">聚划算</el-col>
                 <el-col class="storeLink">天猫超市</el-col>
@@ -323,7 +350,35 @@
                 <el-col class="storeLink">苏宁易购</el-col>
             </el-row>
         </div>
+        <div class="row2" style="background-color: rgba(153,144,255,0.77);color: white;">
+            <el-row class="header" style="margin: 0 auto;height: 31px; background-color:transparent;">
+                <el-col style="width: 190px;height: 522px;padding:2px 0;text-align: center;background-color: rgba(255,68,1,0.75)">
+                    <el-row v-for="item in marketLink">
+                        <e-col v-for=""></e-col>
+                    </el-row>
+                </el-col>
+                <el-col style="width: 490px;height: 512px;padding:0;text-align: center;background-color: rgba(108,75,255,0);margin: 10px 0 0 10px">
 
+                    <el-carousel :interval="5000" height="280px" arrow="always" style="margin:0">
+                        <el-carousel-item v-for="item in indexImg1" :key="item" style="margin: 0">
+                            <img :src="item" alt="" width="100%">
+                        </el-carousel-item>
+                    </el-carousel>
+                    <div style="height: 32px;text-align: left">
+                        <span class="iconfont icon-tianmao2"></span>
+                    </div>
+                    <el-carousel :interval="5000" height="190px" arrow="always" style="margin:0;padding: 5px">
+                        <el-carousel-item v-for="item in indexImg2" :key="item" style="margin: 0">
+                            <div>
+                                <img :src="item" alt="" width="250px">
+                                <img :src="item" alt="" width="250px">
+                            </div>
+                        </el-carousel-item>
+                    </el-carousel>
+
+                </el-col>
+            </el-row>
+        </div>
 
     </el-container>
 
@@ -340,6 +395,15 @@
         el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
         data() {
             return {
+                marketLink: [
+                    [
+                        {title:'女装',url:'',category:[]},
+                        {title:'男装',url:'',category:[]},
+                        {title:'内衣',url:'',category:[]},
+                    ],
+                    []
+                ],
+                indexImg1: ['./img/index1.1.webp', './img/index1.2.webp', './img/index1.3.webp', './img/index1.4.webp', './img/index1.5.webp'],
                 user: {
                     hotSearch: '半领内搭女加绒',
                     RecentlySearch: ['笔记本', 'r5 3600散片']

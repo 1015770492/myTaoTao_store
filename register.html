@@ -35,9 +35,9 @@
     <script src="./js/api.js"></script>
     <script src="./js/jquery.js"></script>
     <script language="JavaScript">
-        function getResponse(resp){
+        function getResponse(resp) {
             console.log(resp)
-            vm._data.userForm.checkComputer='success'//有返回则不是机器
+            vm._data.userForm.checkComputer = 'success'//有返回则不是机器
             console.log(vm)
         }
     </script>
@@ -349,27 +349,35 @@
                     checkPass: '',//重复密码
                     phone: '',//电话
                     value: '+86',//区号
-                    checkComputer:'',//检验人机
-                    select: '',//选择的区号
+                    checkComputer: '',//检验人机
                 }
             }
 
         },
         methods: {
             submitForm() {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+                this.$http.post('/register', {
+                    user: {
+                        registerDate: '',
+                        userPhone: this.userForm.phone,
+                        userName:this.userForm.userName,
+                        password:this.userForm.pass,
+                        region:this.userForm.value
                     }
-                });
+                }).then(
+                    response => {
+                        const result = response.data;//获取返回的数据
+
+                        console.log(result)
+                    }),
+                    response => {
+                        this.$message.error('登录失败');
+                    }
             },
 
             next() {
 
-                if (this.userForm.checkComputer==='') {
+                if (this.userForm.checkComputer === '') {
                     return this.$message({
                         showClose: true,
                         message: '请通过人机认证',

@@ -173,28 +173,29 @@
                             </el-input>
                         </el-row>
                         <el-row class="form">
-                            <el-button @click.native="login" style="background-color: #ff4401;color: white;width: 300px;font-size: 17px">登录
+                            <el-button @click.native="login"
+                                       style="background-color: #ff4401;color: white;width: 300px;font-size: 17px">登录
                             </el-button>
                         </el-row>
                         <el-row class="form" style="text-align: left;color: #3c3c3c;">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-weibo"></use>
                             </svg>
-                            <el-link style="margin-right: 20px;font-size: 10px;">
+                            <el-link @click="weibo" style="margin-right: 20px;font-size: 10px;">
                                 微博登录
                             </el-link>
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-zhifubao"></use>
                             </svg>
-                            <el-link style="margin-right: 10px;font-size: 10px;">
+                            <el-link @click="zhifubao" style="margin-right: 10px;font-size: 10px;">
                                 支付宝登录
                             </el-link>
                         </el-row>
 
                         <el-row class="form" style="padding-right: 0;margin-left: 25px">
-                            <el-link class="login-link-font" href="register.html">免费注册</el-link>
-                            <el-link class="login-link-font" href="#">忘记会员名</el-link>
-                            <el-link class="login-link-font" href="#">忘记密码</el-link>
+                            <el-link  href="register.html" class="login-link-font">免费注册</el-link>
+                            <el-link @click.native="forgetUserName" class="login-link-font" href="#">忘记会员名</el-link>
+                            <el-link @click.native="forgetPassword" class="login-link-font" href="#">忘记密码</el-link>
                         </el-row>
 
                     </div>
@@ -224,23 +225,66 @@
         // 配置选项(option)
         el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
         data: {
-            user:{
+            user: {
                 userName: '',
-                password:''
+                password: ''
             }
 
         },
-        methods:{
-            login(){
-
-                this.$http.post('/login',{user: this.user}).then(
-                    response=>{
-                        const result=response.data;//获取返回的数据
+        methods: {
+            forgetPassword() {
+                this.$alert('暂未开放', '找回密码功能', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `敬请期待`
+                        });
+                    }
+                })
+            },
+            forgetUserName() {
+                this.$alert('暂未开放', '找回会员名功能', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `敬请期待`
+                        });
+                    }
+                })
+            },
+            zhifubao() {
+                this.$alert('暂未开放', '支付宝登录功能', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `敬请期待`
+                        });
+                    }
+                })
+            },
+            weibo() {
+                this.$alert('暂未开放', '微博登录功能', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `敬请期待`
+                        });
+                    }
+                })
+            },
+            login() {
+                this.$http.post('/login', {user: this.user}).then(
+                    response => {
+                        const result = response.data;//获取返回的数据
                         console.log(result)
                     }),
-                    response=>{
-                    this.$message.error('登录失败');
-                }
+                    response => {
+                        this.$message.error('登录失败');
+                    }
             }
         }
     })
