@@ -298,16 +298,18 @@
             </el-dropdown>
             <!--   手机逛淘宝-->
             <el-link class="header-title-font2">手机逛淘淘</el-link>
-            <el-link class="header-title-font2">淘淘网首页</el-link>
+            <el-link href="/" class="header-title-font2">淘淘网首页</el-link>
             <!--    我的淘淘-->
             <el-dropdown class="header-title-font2">
-                <span class="el-dropdown-link" style="margin-top: 5px">
+                <span href="/login" class="el-dropdown-link" style="margin-top: 5px">
                     我的淘淘
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>已买到的宝贝</el-dropdown-item>
-                    <el-dropdown-item>我的足迹</el-dropdown-item>
+                    <el-dropdown-item><el-link href="/mytaotao">
+                        已买到的宝贝
+                    </el-link></el-dropdown-item>
+                    <el-dropdown-item><el-link href="/mytaotao">我的足迹</el-link></el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
 
@@ -421,26 +423,22 @@
                             <img :src="item" alt="" width="100%">
                         </el-carousel-item>
                     </el-carousel>
-                    <div style="height: 32px;text-align: left">
-                        <span class="iconfont icon-tianmao2"></span>
-                    </div>
-                    <el-carousel :interval="5000" height="190px" arrow="always" style="margin:0;padding: 5px">
-                        <el-carousel-item v-for="items in indexImg2" style="margin: 0">
-                            <div class="demo-image__placeholder">
-                                <div class="block">
-                                    <span class="demonstration">默认</span>
-                                    <el-image :src="items[0]"></el-image>
-                                </div>
-                                <div class="block">
-                                    <span class="demonstration">自定义</span>
-                                    <el-image :src="items[1]">
-                                        <div slot="placeholder" class="image-slot">
-                                            加载中<span class="dot">...</span>
-                                        </div>
-                                    </el-image>
-                                </div>
-                            </div>
-
+                    <el-row style="height: 20px;text-align: left;background-color: #3a8ee6;">
+                        <el-col style="width: auto">
+                            <i class="iconfont icon-tianmao2" style="color: #2d2d2d;font-size: 26px"></i>
+                        </el-col>
+                        <el-col style="width: auto">
+                            <i class="iconfont icon-tianmao_huaban" style="color: #ff1648;"></i>
+                        </el-col>
+                    </el-row>
+                    <el-carousel :interval="5000" height="190px" arrow="always" style="margin:0;">
+                        <el-carousel-item v-for="items in indexImg2" style="margin: 0" class="el-row">
+                            <el-col  style="background-color: #ff4400;width: 240px;height: 100%" >
+                                <img :src="items[0]" alt="" >
+                            </el-col>
+                            <el-col  style="background-color: #5daf34;width: 240px;height: 100%;">
+                                <img :src="items[1]" alt="" style="margin-left: 10px">
+                            </el-col>
                         </el-carousel-item>
                     </el-carousel>
 
@@ -483,21 +481,21 @@
                 </el-col>
             </el-row>
         </div>
-        <el-row class="row3">
-            <el-row class="header" style="margin: 0 auto;">
-                <el-col :span="12" style="background-color: #3a8ee6">
-                    <div class="grid-content bg-purple">
-                        12
-                    </div>
-                </el-col>
-                <el-col :span="12" style="background-color: #e63656">
-                    <div class="grid-content bg-purple">
-                        456
-                    </div>
-                </el-col>
-            </el-row>
+        <!--        <el-row class="row3">-->
+        <!--            <el-row class="header" style="margin: 0 auto;">-->
+        <!--                <el-col :span="12" style="background-color: #3a8ee6">-->
+        <!--                    <div class="grid-content bg-purple">-->
+        <!--                        12-->
+        <!--                    </div>-->
+        <!--                </el-col>-->
+        <!--                <el-col :span="12" style="background-color: #e63656">-->
+        <!--                    <div class="grid-content bg-purple">-->
+        <!--                        456-->
+        <!--                    </div>-->
+        <!--                </el-col>-->
+        <!--            </el-row>-->
 
-        </el-row>
+        <!--        </el-row>-->
 
     </el-container>
 
@@ -517,6 +515,13 @@
                 marketLinkIndex: -1,
                 leftStatus: 0,
                 rightStatus: 0,
+                indexImg1: ['./img/index1.1.jpg', './img/index1.2.jpg', './img/index1.3.jpg', './img/index1.4.jpg', './img/index1.5.jpg'],
+                indexImg2: [
+                    ['./img/index2.1.jpg', './img/index2.2.jpg'],
+                    ['./img/index2.3.jpg', './img/index2.4.jpg'],
+                    ['./img/index2.5.jpg', './img/index2.6.jpg'],
+                    ['./img/index2.7.jpg', './img/index2.8.jpg'],
+                    ['./img/index2.9.jpg', './img/index2.10.jpg']],
                 marketLink: [
                     [
                         {
@@ -2146,13 +2151,6 @@
                     ],
 
                 ],
-                indexImg1: ['./img/index1.1.jpg', './img/index1.2.jpg', './img/index1.3.jpg', './img/index1.4.jpg', './img/index1.5.jpg'],
-                indexImg2: [
-                    ['./img/index2.1.jpg', './img/index2.2.jpg'],
-                    ['./img/index2.3.jpg', './img/index2.4.jpg'],
-                    ['./img/index2.5.jpg', './img/index2.6.jpg'],
-                    ['./img/index2.7.jpg', './img/index2.8.jpg'],
-                    ['./img/index2.9.jpg', './img/index2.10.jpg']],
                 user: {
                     hotSearch: '半领内搭女加绒',
                     RecentlySearch: ['笔记本', 'r5 3600散片']
